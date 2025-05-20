@@ -1,6 +1,8 @@
-﻿using static System.Console;
+﻿using System.ComponentModel;
+using static System.Console;
 
 var passwordVault = new Dictionary<string, string>();
+int nrEl = passwordVault.Count;
 
 WriteLine("Password Vault Console App");
 
@@ -13,8 +15,10 @@ while (option != 4)
             AddPassword(passwordVault);
             break;
         case 2:
+            ViewPasswords(passwordVault);
             break;
         case 3:
+            DeletePassword(passwordVault);
             break;
         default:
             WriteLine("Invalid option.");
@@ -23,9 +27,8 @@ while (option != 4)
     option = Option();
 }
 WriteLine("Exiting app, Goodbye.");
-ReadLine();
 
-//methods
+
 static int Option()
 {
     WriteLine();
@@ -40,7 +43,6 @@ static int Option()
     return choice;
 }
 
-//Adding a password method.
 static void AddPassword (Dictionary<string, string> vault)
 {
     WriteLine();
@@ -53,6 +55,35 @@ static void AddPassword (Dictionary<string, string> vault)
     WriteLine("Password added successfully.");
 }
 
-//Viewing a password method.
+static void ViewPasswords(Dictionary<string, string> vault)
+{
+    WriteLine();
+    if (vault.Count == 0)
+        WriteLine("There are no saved passwords");
+    else
+        foreach (var password in vault)
+        {
+            WriteLine($"Service: {password.Key}, Password: {password.Value}");
+        }
+}
 
-//Deleting a password method.
+static void DeletePassword(Dictionary<string, string> vault)
+{
+    WriteLine();
+    if (vault.Count == 0)
+        WriteLine("There are no saved passwords");
+    else
+    {
+        Write("Enter the service for the password you want to delete: ");
+        string passKey = ReadLine();
+
+        bool isKeyFound = vault.ContainsKey(passKey);
+        if (isKeyFound)
+        {
+            vault.Remove(passKey);
+            WriteLine("Password deleted successfully.");
+        }
+        else
+            WriteLine("Password not found.");
+    }
+}
